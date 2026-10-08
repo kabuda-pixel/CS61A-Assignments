@@ -24,7 +24,14 @@ def num_eights(n):
     ...       ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr', 'For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    if n == 0:
+        return 0
+    elif n % 10 == 8:
+        return 1 + num_eights(n // 10)
+    else:
+        return num_eights(n // 10)
+
+  
 
 
 def digit_distance(n):
@@ -46,7 +53,12 @@ def digit_distance(n):
     ...       ['For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    if n < 10:
+        return 0
+    else:
+        return abs(n // 10 % 10 - n %10) + digit_distance(n // 10)
+    
+    
 
 
 def interleaved_sum(n, odd_func, even_func):
@@ -70,8 +82,14 @@ def interleaved_sum(n, odd_func, even_func):
     >>> check(HW_SOURCE_FILE, 'interleaved_sum', ['BitAnd', 'BitOr', 'BitXor']) # ban bitwise operators, don't worry about these if you don't know what they are
     True
     """
-    "*** YOUR CODE HERE ***"
-
+    def sum(k):
+        if k > n:
+            return 0
+        elif k == n:
+            return odd_func(k)
+        else:
+            return odd_func(k) + even_func(k + 1) + sum(k + 2)
+    return sum(1)
 
 def next_smaller_dollar(bill):
     """Returns the next smaller bill in order."""
@@ -106,7 +124,19 @@ def count_dollars(total):
     >>> check(HW_SOURCE_FILE, 'count_dollars', ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    def count_helper(current_total, max_bill):
+        if current_total == 0:
+            return 1
+        elif current_total < 0 or max_bill is None:
+            return 0
+        else:
+            use_bill = count_helper(current_total - max_bill, max_bill)
+            skip_bill = count_helper(current_total, next_smaller_dollar(max_bill))
+            return use_bill + skip_bill
+    return count_helper(total, 100)
+
+
+
 
 
 def next_larger_dollar(bill):
@@ -142,7 +172,21 @@ def count_dollars_upward(total):
     >>> check(HW_SOURCE_FILE, 'count_dollars_upward', ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    def count_helper(current_total, min_bill):
+        if current_total == 0:
+            return 1
+        elif current_total < 0 or min_bill is None:
+            return 0
+        else:
+            use_bill = count_helper(current_total - min_bill, min_bill)
+            skip_bill = count_helper(current_total, next_larger_dollar(min_bill))
+            return use_bill + skip_bill
+    return count_helper(total, 1)
+
+ 
+
+
+
 
 
 def print_move(origin, destination):
@@ -177,7 +221,14 @@ def move_stack(n, start, end):
     Move the top disk from rod 1 to rod 3
     """
     assert 1 <= start <= 3 and 1 <= end <= 3 and start != end, "Bad start/end"
-    "*** YOUR CODE HERE ***"
+    middle = 6 - start - end
+    if n == 0:
+        return 0
+    move_stack(n - 1, start, middle)
+    print_move(start, end)
+    move_stack(n-1, middle, end)
+    
+    
 
 
 from operator import sub, mul
